@@ -525,6 +525,55 @@ def build_report():
 
     add_image_figure(doc, "github_pr.png", "Figura 8: Estado del Pull Request #1 en GitHub y trazabilidad de ramas remotas.")
 
+    add_h2("7.1 Estrategia de Versionamiento Granular (Commits y Pushes Atomicos)")
+    add_p(
+        "Para demostrar de manera transparente y continua el flujo de trabajo colaborativo, cada uno de los archivos del proyecto "
+        "fue versionado y enviado al repositorio remoto de forma atomica e individual. Esto permite auditar cada incremento "
+        "de codigo por separado y comprobar que cada componente se probo antes de integrar el siguiente:"
+    )
+    atomic_commits = [
+        ("37deedf", "creacion de archivo docs/schema.sql"),
+        ("7b279d6", "creacion de archivo pom.xml"),
+        ("19e718c", "creacion de archivo .gitignore"),
+        ("59befd0", "creacion de archivo .mvn/wrapper/maven-wrapper.properties"),
+        ("fa2ca89", "creacion de archivo mvnw"),
+        ("f2eb621", "creacion de archivo mvnw.cmd"),
+        ("95a68a7", "creacion de archivo src/main/resources/application.properties"),
+        ("6ffec4a", "creacion de archivo src/main/java/com/motocare/api/models/Usuario.java"),
+        ("9ecb10b", "creacion de archivo src/main/java/com/motocare/api/models/RegistroServicio.java"),
+        ("471621d", "creacion de archivo src/main/java/com/motocare/api/repositories/UsuarioRepository.java"),
+        ("304eeb1", "creacion de archivo src/main/java/com/motocare/api/repositories/RegistroServicioRepository.java"),
+        ("452df48", "creacion de archivo src/main/java/com/motocare/api/controllers/AuthController.java"),
+        ("1174201", "creacion de archivo src/main/java/com/motocare/api/controllers/ServicioController.java"),
+        ("f9cf994", "creacion de archivo src/main/java/com/motocare/api/ApiApplication.java"),
+        ("bdb9274", "creacion de archivo src/test/java/com/motocare/api/ApiApplicationTests.java"),
+        ("6d1308e", "creacion de archivo docs/MotoCare_API.postman_collection.json"),
+        ("ae426c2", "creacion de script docs/generate_report.py"),
+        ("973c15b", "creacion de captura docs/images/mysql_workbench.png"),
+        ("8917936", "creacion de captura docs/images/terminal_startup.png"),
+        ("946f638", "creacion de captura docs/images/postman_test1_login.png"),
+        ("d475d0c", "creacion de captura docs/images/postman_test2_get.png"),
+        ("69b5a0c", "creacion de captura docs/images/postman_test3_post.png"),
+        ("97995e6", "creacion de captura docs/images/postman_test4_put.png"),
+        ("33caebf", "creacion de captura docs/images/postman_test5_delete.png"),
+        ("3c5baeb", "creacion de captura docs/images/github_pr.png"),
+        ("50db0a2", "creacion de script docs/build_docx_report.py"),
+        ("33b8e56", "creacion de reporte docs/Reporte_Proyecto_MotoCare_Fase2.docx")
+    ]
+    for sha, c_msg in atomic_commits:
+        bp = doc.add_paragraph(style='List Bullet')
+        bp.paragraph_format.space_before = Pt(1)
+        bp.paragraph_format.space_after = Pt(1)
+        r_sha = bp.add_run(f"[{sha}] ")
+        r_sha.font.name = "Consolas"
+        r_sha.font.size = Pt(9)
+        r_sha.bold = True
+        r_sha.font.color.rgb = RGBColor(30, 58, 138)
+        r_msg = bp.add_run(c_msg)
+        r_msg.font.name = "Segoe UI"
+        r_msg.font.size = Pt(9.5)
+        r_msg.font.color.rgb = RGBColor(51, 65, 85)
+
     # ==================== SECCION 8 ====================
     add_h1("8. Checklist de Calidad y Criterios de Evaluacion")
     add_p("A continuacion se presenta la matriz de cumplimiento de los criterios de evaluacion de la Fase 2:")
