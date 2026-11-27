@@ -1,0 +1,236 @@
+{
+	"info": {
+		"_postman_id": "b1a2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+		"name": "MotoCare API",
+		"description": "Coleccion de endpoints REST para la API de MotoCare (Fase 2 - Spring Boot y MySQL)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Login Usuario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Validate user data returned\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.email).to.eql(\"demo@motocare.com\");",
+							"    pm.expect(jsonData.idUsuario).to.eql(1);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"demo@motocare.com\",\n    \"password\": \"123456\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"login"
+					]
+				},
+				"description": "Valida credenciales existentes y retorna los datos basicos del usuario autenticado."
+			},
+			"response": []
+		},
+		{
+			"name": "2. Listar Servicios por Usuario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Validate services list is array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(Array.isArray(jsonData)).to.be.true;",
+							"    pm.expect(jsonData.length).to.be.at.least(2);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/servicios/usuario/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"servicios",
+						"usuario",
+						"1"
+					]
+				},
+				"description": "Lista todos los servicios asociados a un usuario ordenados por fecha descendente."
+			},
+			"response": []
+		},
+		{
+			"name": "3. Crear Nuevo Servicio",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"pm.test(\"Validate created service ID\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('idServicio');",
+							"    pm.expect(jsonData.tipoServicio).to.eql(\"Cambio de llantas y balanceo\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"idUsuario\": 1,\n    \"tipoServicio\": \"Cambio de llantas y balanceo\",\n    \"kilometraje\": 13000,\n    \"costo\": 1200.00,\n    \"fechaServicio\": \"2026-11-27\",\n    \"proximoKilometraje\": 20000,\n    \"estado\": \"Pendiente\",\n    \"observaciones\": \"Llantas Michelin Pilot Street\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/servicios",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"servicios"
+					]
+				},
+				"description": "Crea un nuevo registro de mantenimiento para un vehiculo de usuario."
+			},
+			"response": []
+		},
+		{
+			"name": "4. Actualizar Servicio por ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Validate updated state to Completado\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.estado).to.eql(\"Completado\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"idUsuario\": 1,\n    \"tipoServicio\": \"Cambio de llantas y balanceo\",\n    \"kilometraje\": 13000,\n    \"costo\": 1200.00,\n    \"fechaServicio\": \"2026-11-27\",\n    \"proximoKilometraje\": 20000,\n    \"estado\": \"Completado\",\n    \"observaciones\": \"Llantas Michelin Pilot Street instaladas y calibradas a 32 PSI\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/servicios/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"servicios",
+						"3"
+					]
+				},
+				"description": "Actualiza el estado u observaciones de un servicio existente por su identificador."
+			},
+			"response": []
+		},
+		{
+			"name": "5. Eliminar Servicio por ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/servicios/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"servicios",
+						"3"
+					]
+				},
+				"description": "Elimina fisicamente un registro de servicio de la base de datos."
+			},
+			"response": []
+		}
+	]
+}
